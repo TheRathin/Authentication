@@ -1,0 +1,34 @@
+{
+  "name": "authentication",
+  "version": "1.0.0",
+  "description": "Microservice for Authenctiation using JWT",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheRathin/Authentication.git"
+  },
+  "author": "Rathin Sharma",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheRathin/Authentication/issues"
+  },
+  "homepage": "https://github.com/TheRathin/Authentication#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^1.7.0"
+  }
+}
