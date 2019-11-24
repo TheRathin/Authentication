@@ -1,24 +1,28 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
 const app = express();
 const PORT = 3000;
 const config = require('./config/devConfig.json');
 
-// const token = jwt.sign({ username: 'rathin' }, Buffer.from(config.privateKey, 'ASCII', 'UTF-8'), { expiresIn: config.expiresIn, algorithm: config.algorithm });
-// console.log(token)
+// Connect to database
+const mongoose = require('mongoose');
+mongoose.connect(config.dbConn, {useNewUrlParser: true, useUnifiedTopology: true}, () => {
+  console.log('Connected to db');
+})
+
 // Middelware
-
-// Import Routes
-
 app.use(bodyParser.json());
 
+// Import Routes
+const authRoute = require('./routes/auth');
+
 // Use routes as middleware
+app.use(authRoute);
 
 app.listen(PORT, () => {
   console.log(`App is listening on Port ${PORT}`);
 });
 
-app.get('./', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Welcome to Node js Authentication Microservice');
 });
