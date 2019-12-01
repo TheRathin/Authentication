@@ -1,17 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const app = express();
 const PORT = 3000;
+const mongoose = require('mongoose');
 const config = require('./config/devConfig.json');
+const verifyToken = require('./middleware/verifyToken');
 
 // Connect to database
-const mongoose = require('mongoose');
-mongoose.connect(config.dbConn, {useNewUrlParser: true, useUnifiedTopology: true}, () => {
+mongoose.connect(config.dbConn, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
   console.log('Connected to db');
-})
+});
 
 // Middelware
 app.use(bodyParser.json());
+app.use(verifyToken);
 
 // Import Routes
 const authRoute = require('./routes/auth');
