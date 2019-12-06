@@ -20,9 +20,9 @@ authRouter.post('/signup', async (req, res) => {
 
   if (isEmailTaken) { return res.status(400).send('Email already being used'); }
 
-  const hashedPass = bcryptjs.hashSync(userCred.password, 10, (err, res) => {
+  const hashedPass = bcryptjs.hashSync(userCred.password, 10, (err, newPass) => {
     if (err) { return res.status(500).send('Could not register user, please try again'); }
-    return res;
+    return newPass;
   });
 
   const newUser = new User({ email: userCred.email, password: hashedPass });
@@ -51,10 +51,10 @@ authRouter.post('/login', async (req, res) => {
 
   if (!valPass) { return res.status(400).send('Invalid Password'); }
 
+  // eslint-disable-next-line max-len
   const jwtToken = jwt.sign({ _id: regUser._id, ...userCred }, config.privateKey, { expiresIn: config.expiresIn, algorithm: config.algorithm });
 
   return res.status(200).header('auth-token', jwtToken).send('Successful Login');
-
 });
 
 module.exports = authRouter;
