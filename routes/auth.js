@@ -12,25 +12,32 @@ authRouter.post('/signup', async (req, res) => {
     password: req.body.password,
   };
 
-  const { error } = signupValidation(userCred);
+  try {
+    const { error } = signupValidation(userCred);
 
-  if (error) { return res.status(400).send(error.details); }
+    if (error) { throw error.details; }
 
-  const isEmailTaken = await User.findOne({ email: userCred.email });
+    const isEmailTaken = await User.findOne({ email: userCred.email }).catch(( err) => {
+      throw new Error('new error');
+    });
 
-  if (isEmailTaken) { return res.status(400).send('Email already being used'); }
+    if (isEmailTaken) { throw new Error('Email already being used'); }
 
-  const hashedPass = bcryptjs.hashSync(userCred.password, 10, (err, newPass) => {
-    if (err) { return res.status(500).send('Could not register user, please try again'); }
-    return newPass;
-  });
+    const hashedPass = bcryptjs.hashSync(userCred.password, 10, (err, newPass) => {
+      if (err) { throw new Error('Could not register user, please try again'); }
+      return newPass;
+    });
 
-  const newUser = new User({ email: userCred.email, password: hashedPass });
-  const { code, msg } = await newUser.save()
-    .then(() => ({ code: '200', msg: 'User signuped!' }))
-    .catch(() => ({ code: '500', msg: 'Could not register user' }));
+    const newUser = new User({ email: userCred.email, password: hashedPass });
 
-  return res.status(code).send(msg);
+    const { code, msg } = await newUser.save()
+      .then(() => ({ code: '200', msg: 'User signuped!' }))
+      .catch(() => { throw new Error('Could not register user'); });
+
+    return res.status(code).send(msg);
+  } catch (error) {
+    return res.status(400).send(error.toString());
+  }
 });
 
 authRouter.post('/login', async (req, res) => {
@@ -39,9 +46,14 @@ authRouter.post('/login', async (req, res) => {
     password: req.body.password,
   };
 
-  const { error } = signupValidation(userCred);
+  // try {
+  //   const { error } = signupValidation(userCred);
 
-  if (error) { return res.status(400).send(error.details); }
+  //   if (error) { return res.status(400).send(error.details); }
+
+  // } catch (error) {
+    
+  // }
 
   const regUser = await User.findOne({ email: userCred.email });
 
