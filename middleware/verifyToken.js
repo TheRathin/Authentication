@@ -4,7 +4,7 @@ const config = require('../config/devConfig.json');
 const verifyToken = (req, res, next) => {
   const url = req.originalUrl;
 
-  if (url === '/signup' || url === '/login') {
+  if (url === '/signup' || url === '/login' || url === '/') {
     return next();
   }
   const authToken = req.header('auth-token');

@@ -5,7 +5,7 @@ const User = require('../model/User');
 const config = require('../config/devConfig.json');
 const { signupValidation } = require('../validations/login');
 
-authRouter.post('/signup', async (req, res) => {
+authRouter.post('/signup', async (req, res, next) => {
 
   const userCred = {
     email: req.body.email,
@@ -15,16 +15,14 @@ authRouter.post('/signup', async (req, res) => {
   try {
     const { error } = signupValidation(userCred);
 
-    if (error) { throw error.details; }
+    if (error) { throw (error.details[0].message); }
 
-    const isEmailTaken = await User.findOne({ email: userCred.email }).catch(( err) => {
-      throw new Error('new error');
-    });
+    const isEmailTaken = await User.findOne({ email: userCred.email });
 
-    if (isEmailTaken) { throw new Error('Email already being used'); }
+    if (isEmailTaken) { throw ('Email is already being used'); }
 
     const hashedPass = bcryptjs.hashSync(userCred.password, 10, (err, newPass) => {
-      if (err) { throw new Error('Could not register user, please try again'); }
+      if (err) { throw ('Could not register user, please try again'); }
       return newPass;
     });
 
@@ -32,41 +30,36 @@ authRouter.post('/signup', async (req, res) => {
 
     const { code, msg } = await newUser.save()
       .then(() => ({ code: '200', msg: 'User signuped!' }))
-      .catch(() => { throw new Error('Could not register user'); });
+      .catch(() => { throw ('Could not register user'); });
 
     return res.status(code).send(msg);
   } catch (error) {
-    return res.status(400).send(error.toString());
+    next(error);
   }
 });
 
-authRouter.post('/login', async (req, res) => {
+authRouter.post('/login', async (req, res,next) => {
   const userCred = {
     email: req.body.email,
     password: req.body.password,
   };
 
-  // try {
-  //   const { error } = signupValidation(userCred);
-
-  //   if (error) { return res.status(400).send(error.details); }
-
-  // } catch (error) {
-    
-  // }
+  try {
 
   const regUser = await User.findOne({ email: userCred.email });
 
-  if (!regUser) { return res.status(400).send('Invalid email'); }
+  if (!regUser) { throw ('Invalid email'); }
 
   const valPass = await bcryptjs.compare(userCred.password, regUser.password);
 
-  if (!valPass) { return res.status(400).send('Invalid Password'); }
+  if (!valPass) { throw ('Invalid Password'); }
 
   // eslint-disable-next-line max-len
   const jwtToken = jwt.sign({ _id: regUser._id, ...userCred }, config.privateKey, { expiresIn: config.expiresIn, algorithm: config.algorithm });
-
-  return res.status(200).header('auth-token', jwtToken).send('Successful Login');
+  return res.status(200).header('auth-token', jwtToken).send('Successful Login');  
+}catch (error){
+  next(error);
+  }
 });
 
 module.exports = authRouter;
