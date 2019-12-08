@@ -1,0 +1,51 @@
+#%RAML 1.0
+---
+title: JWT Authentication API Service
+description: Authentication Management package can be used as microservice or further application be built on top of it.
+version: v1
+protocols: [HTTP, HTTPS]
+baseUri: https://github.com/TheRathin/Authentication
+securedBy: [JWT]
+documentation: 
+  - title: Home
+    content: 
+    Welcome to JWT Authentication API Service build by Rathin Sharma.
+    It allows you to have jwt authentication functionality in your
+    application. You could either use it as microservice or build an
+    application on top of it.
+baseUri: http://localhost:3000
+/login:
+    post:
+        description: Accept user credentials and validate whether user exists or not
+        body:
+            application/json:
+                email:
+                    type: string
+                    description: user's email address
+                password:
+                    type: password
+                    description: user's password
+        responses:
+            200:
+            headers:
+                auth-token:
+                    description: JWT token issued after successful login
+            400:
+                description: The credentials provided dosn't exists
+
+/signup:
+    post:
+        description: Accept user credentials and register them
+        body:
+            application/json:
+                email:
+                    type: string
+                    description: user's email address
+                password:
+                    type: password
+                    description: user's password
+        responses:
+            200:
+                description: User successfully login-ed
+            400:
+                description: The credentials provided don't follow the rules

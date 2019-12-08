@@ -1,0 +1,6 @@
+{
+    "privateKey": "MIIBVgIBADANBgkqhkiG9w0BAQEFAASCAUAwggE8AgEAAkEAn6zvov2qcIhWcQYxHywrt9SPSsT2Tgduv+VkpXnzW1dy/+sPhyUApT+9yfnpi0Vr2RGFx7QGpS0eb2SkNp3dNwIDAQABAkAELu60UXsGqbvCCEx/KZQXo90BM3nUf4NaSbNCVpiWmwBJchaVjCVG8zKU4bRUT1/xMynxHZeW1RXmw9Vws6sxAiEA3BzcLVbiy63yiQMsRSFmK0FA5O9i+BGT3tYek2W2av8CIQC5tYcNLs7U7uGgtg/PWfZ5UDuCiV1TscPH5VpP9BMlyQIhAKv/VUGMkl5MR6gutYozhg2oyNfcA78KpTzMnknZggjrAiEAlgWmbyjkH7JHBXxuczSa30/Ic2CiyyztGzwV5EcpfLkCIQCSKj55712Ls/7sBvynyoDrXoOgC37UwrKop5Vtmo2USQ==",
+    "expiresIn": "6h",
+    "algorithm": "HS256",
+    "dbConn": "mongodb://localhost:27017"
+}
