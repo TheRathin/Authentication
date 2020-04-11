@@ -16,8 +16,6 @@ mongoose.connect(config.dbConn, { useNewUrlParser: true, useUnifiedTopology: tru
 // Middelware
 app.use(bodyParser.json());
 app.use(verifyToken);
-// always put error handler middleware in the end
-app.use(errorHandler);
 
 // Import Routes
 const authRoute = require('./routes/auth');
@@ -25,6 +23,8 @@ const authRoute = require('./routes/auth');
 // Use routes as middleware
 app.use(authRoute);
 
+// always put error handler middleware in the end
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App is listening on Port ${PORT}`);
